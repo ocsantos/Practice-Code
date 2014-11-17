@@ -22,6 +22,7 @@ void setup() {
 void draw() {
   background(0);
   ellipse(x, y, sz, sz);
+  velX+=accelX;
   velY +=grav;
   x+=velX;
   y+=velY;
