@@ -1,7 +1,7 @@
 PVector loc, acc, vel;
 PVector loc2, acc2, vel2;
-float sz,sz2;
-PVector mouse;
+float sz=100;
+float sz2=50;
 
 
 void setup() {
@@ -9,12 +9,9 @@ void setup() {
   loc=new PVector(width/2, height/2);
   vel=PVector.random2D();
   acc=new PVector(0, 0);
-  loc2=new PVector(width/2, height/2);
+  loc2=new PVector(width*.25, height*.25);
   vel2=PVector.random2D();
   acc2=new PVector(0, 0);
-  sz=100;
-  sz2=50;
-  mouse=new PVector();
 }
 
 void draw() {
@@ -24,9 +21,9 @@ void draw() {
   loc.add(vel);
   vel2.add(acc2);
   loc2.add(vel2);
-  mouse.set(mouseX, mouseY);
 
-  //Bounce Ball 
+
+  //Bounce Ball off walls 
   if (loc.x+sz/2>width || loc.x-sz/2<0) {
     vel.x*=-1;
   }
@@ -36,25 +33,34 @@ void draw() {
 if (loc2.x+sz2/2>width || loc2.x-sz2/2<0) {
     vel2.x*=-1;
   }
-  if (loc.y2+sz2/2>height || loc.y2-sz2/2<0) {
+  if (loc2.y+sz2/2>height || loc2.y-sz2/2<0) {
     vel2.y*=-1;
+  }
+
+    // Check Balls touch
   if (loc.dist(loc2) <sz/2+sz2/2) {
     fill(255, 0, 0);
     println("Mouse On Fleek");
     if (loc.x < loc2.x) {
       vel.x=-abs(vel.x);
+      vel2.x=abs(vel2.x);
     } else { 
   vel.x=abs(vel.x);
+  vel2.x=-abs(vel2.x);
 }
 
-if (loc.y< mouse.y) {
+if (loc.y< loc2.y) {
   vel.y=-abs(vel.y);
+  vel2.y=abs(vel2.y);
 }else { 
   vel.y=abs(vel.y);
+  vel2.y=-abs(vel2.y);
 }
   }else {
   fill(0, 0, 255);
 }
+//Draw Balls
 ellipse(loc.x, loc.y, sz, sz);
+ellipse(loc2.x,loc2.y,sz2,sz2);
 }
 
