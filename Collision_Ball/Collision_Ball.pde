@@ -1,66 +1,65 @@
-PVector loc, acc, vel;
-PVector loc2, acc2, vel2;
-float sz=100;
-float sz2=50;
+int count=100;
+
+PVector[] loc=new PVector[count];
+PVector[] acc=new PVector[count];
+PVector[] vel=new PVector[count];
+float [] sz=new float[count];
 
 
 void setup() {
   size(800, 650);
-  loc=new PVector(width/2, height/2);
-  vel=PVector.random2D();
-  acc=new PVector(0, 0);
-  loc2=new PVector(width*.25, height*.25);
-  vel2=PVector.random2D();
-  acc2=new PVector(0, 0);
+  for (int i = 0; i < count; i++) {    
+    sz[i] = random(20, 40);           
+    loc[i] = new PVector(random(sz[i], width-sz[i]), random(sz[i], height-sz[i])); 
+    vel[i] = PVector.random2D();     
+    acc[i] = new PVector(0, 0);
+  }
 }
-
 void draw() {
-  background(0);
+  background(106, 26, 26);
+  for (int i = 0; i < count; i++) { 
   //Moving the Ball
-  vel.add(acc);
-  loc.add(vel);
-  vel2.add(acc2);
-  loc2.add(vel2);
+  vel[i].add(acc[i]);
+  loc[i].add(vel[i]);
 
 
   //Bounce Ball off walls 
-  if (loc.x+sz/2>width || loc.x-sz/2<0) {
-    vel.x*=-1;
+  if (loc[i].x + sz[i]/2 > width || loc[i].x - sz[i]/2 < 0) {
+    vel[i].x *= -1;
   }
-  if (loc.y+sz/2>height || loc.y-sz/2<0) {
-    vel.y*=-1;
-  }
-if (loc2.x+sz2/2>width || loc2.x-sz2/2<0) {
-    vel2.x*=-1;
-  }
-  if (loc2.y+sz2/2>height || loc2.y-sz2/2<0) {
-    vel2.y*=-1;
+  if (loc[i].y + sz[i]/2 > height || loc[i].y - sz[i]/2 < 0) {
+    vel[i].y *= -1;
   }
 
-    // Check Balls touch
-  if (loc.dist(loc2) <sz/2+sz2/2) {
-    fill(255, 0, 0);
-    println("Mouse On Fleek");
-    if (loc.x < loc2.x) {
-      vel.x=-abs(vel.x);
-      vel2.x=abs(vel2.x);
-    } else { 
-  vel.x=abs(vel.x);
-  vel2.x=-abs(vel2.x);
-}
 
-if (loc.y< loc2.y) {
-  vel.y=-abs(vel.y);
-  vel2.y=abs(vel2.y);
-}else { 
-  vel.y=abs(vel.y);
-  vel2.y=-abs(vel2.y);
-}
-  }else {
-  fill(0, 0, 255);
-}
-//Draw Balls
-ellipse(loc.x, loc.y, sz, sz);
-ellipse(loc2.x,loc2.y,sz2,sz2);
+
+  // Check Balls touch
+  for (int j = 0; j < count; j++) {
+    if (i!=j) {
+      if (loc[i].dist(loc[j]) <sz[i]/2+sz[j]/2) {
+        fill(229, 211, 0);
+        print("Ball On Fleek!!!");
+        if (loc[i].x < loc[j].x) {    
+          vel[i].x = -abs(vel[i].x);
+          vel[j].x = abs(vel[j].x);
+        } else {
+          vel[i].x = abs(vel[i].x);
+          vel[j].x = -abs(vel[j].x);
+        }
+        if (loc[i].y < loc[j].y) {   
+          vel[i].y = -abs(vel[i].y);
+          vel[j].y = abs(vel[j].y);
+        } else {
+          vel[i].y = abs(vel[i].y);
+          vel[j].y = -abs(vel[j].y);
+        }
+      } else {
+        fill(0);
+      }
+    }
+  }
+      //Draw Balls
+      ellipse(loc[i].x, loc[i].y, sz[i], sz[i]);
+    }
 }
 
